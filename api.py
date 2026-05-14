@@ -72,7 +72,7 @@ def run_script():
     
     ## Function to insert a phrase into the entry widget
     # Insert the desired phrase
-    history.insert(0, phrase)
+    history.insert(0, "Hello World")        # working in progress
     # Clear any existing text
     entry.delete(0, cttk.END)
 
