@@ -5,6 +5,7 @@ from tkinter import *
 import customtkinter as cttk
 import threading
 import subprocess
+import tkinter.messagebox as messagebox
 
 ##Initialize CustomTkinter appearance
 cttk.set_appearance_mode("System")  # "Light" or "Dark"
@@ -27,11 +28,6 @@ history = cttk.CTkEntry(app, width=400, height=400, state=DISABLED)
 history.pack(pady=20)
 entry = cttk.CTkEntry(app, width=400, placeholder_text="Write the phrase the System has to finish")
 entry.pack(pady=20)
-
-# function to get text from entry widget
-def print_entry_text():
-    history = entry.get()       #rework
-    print(history)
 
 ##script progress variables
 progress_running = False
@@ -73,6 +69,13 @@ def run_script():
     phrase = entry.get()
     script_dir = os.path.dirname(os.path.abspath(__file__))
     script_path = os.path.join(script_dir, "main.py")
+    
+    ## Function to insert a phrase into the entry widget
+    # Insert the desired phrase
+    history.insert(0, phrase)
+    # Clear any existing text
+    entry.delete(0, cttk.END)
+
 
     def target():
         try:
@@ -82,7 +85,7 @@ def run_script():
 
     thread = threading.Thread(target=target, daemon=True)
     thread.start()
-
+    
 
 ## send button for running the main script
 run_button = cttk.CTkButton(app, text="Send the Phrase", command=run_script)
