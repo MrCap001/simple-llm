@@ -1,3 +1,4 @@
+import sys
 import tensorflow as tf
 import numpy as np
 import re
@@ -159,7 +160,7 @@ def genera_testo(seed_text, n_parole, modello, tokenizer, lunghezza_sequenza):
 # 10. TEST
 # =========================================================
 
-seed = "nel mezzo del cammin di"
+seed = sys.argv[1]
 testo_generato = genera_testo(seed, 10, modello, tokenizer, lunghezza_sequenza)
 
 print("\nSeed iniziale:")
