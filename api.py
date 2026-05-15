@@ -41,7 +41,7 @@ def api_manager():
             capture_output=True, text=True,
             encoding="utf-8"
         )
-        generated_text = result.stdout.strip()
+        generated_text = result.stdout.strip().splitlines()[-1]  
         append_message("System", generated_text)
         
     finally:
