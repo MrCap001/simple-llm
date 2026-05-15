@@ -7,6 +7,8 @@ import threading
 import subprocess
 import tkinter.messagebox as messagebox
 
+from matplotlib import text
+
 ##Initialize CustomTkinter appearance
 cttk.set_appearance_mode("System")  # "Light" or "Dark"
 cttk.set_default_color_theme("blue")
@@ -22,10 +24,30 @@ app.title("2026 Python IA phrase prediction")
 titleLabel = cttk.CTkLabel(app, text="2026 Python IA phrase prediction", font=cttk.CTkFont(size=36, weight="bold"))
 titleLabel.pack(pady=20)
 
+# Create it
+output_box = cttk.CTkTextbox(app, width=400, height=300)
+output_box.configure(state="disabled")  # read-only
+output_box.pack(pady=20)
 
+# Run the script and show the output
+def api_manager():
+    phrase = entry.get()
+    try:
+        append_message("User: ", phrase)
+        run_script(phrase)
+        append_message("System: ", "Processing the phrase...")
+        append_message("System: ", phrase)
+    finally:
+        return 0
+    
+# To append a new message
+def append_message(sender, phrase):
+    output_box.configure(state="normal")
+    output_box.insert("end", f"{sender}: {phrase}\n\n")
+    output_box.configure(state="disabled")
+    output_box.see("end")  # auto-scroll
+    
 ## create a label and an entry set widget
-history = cttk.CTkEntry(app, width=400, height=400, state=DISABLED)
-history.pack(pady=20)
 entry = cttk.CTkEntry(app, width=400, placeholder_text="Write the phrase the System has to finish")
 entry.pack(pady=20)
 
@@ -64,18 +86,10 @@ def stop_progress():
     progressbar.set(progress_value)
 
 
-def run_script():
+def run_script(phrase):
     start_progress()
-    phrase = entry.get()
     script_dir = os.path.dirname(os.path.abspath(__file__))
     script_path = os.path.join(script_dir, "main.py")
-    
-    ## Function to insert a phrase into the entry widget
-    # Insert the desired phrase
-    history.insert(0, "Hello World")        # working in progress
-    # Clear any existing text
-    entry.delete(0, cttk.END)
-
 
     def target():
         try:
@@ -88,7 +102,7 @@ def run_script():
     
 
 ## send button for running the main script
-run_button = cttk.CTkButton(app, text="Send the Phrase", command=run_script)
+run_button = cttk.CTkButton(app, text="Send the Phrase", command=api_manager)
 run_button.pack()
 
 ## progress bar to show the progress of the script      #is needed the threading for the processbar to run
