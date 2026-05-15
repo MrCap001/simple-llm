@@ -36,7 +36,14 @@ def api_manager():
         append_message("User: ", phrase)
         run_script(phrase)
         append_message("System: ", "Processing the phrase...")
-        append_message("System: ", phrase)
+        result = subprocess.run(
+            ["python", "main.py", phrase],
+            capture_output=True, text=True,
+            encoding="utf-8"
+        )
+        generated_text = result.stdout.strip().splitlines()[-1]  
+        append_message("System", generated_text)
+        
     finally:
         return 0
     
